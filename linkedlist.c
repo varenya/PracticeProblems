@@ -120,16 +120,59 @@ void reverse(node ** head_ref){
 	*head_ref = prev;
 }
 
+void deleteDuplicates(node ** head_ref){
+	node * ptr = *(head_ref);
+	node * prev;
+	node * temp;
+	while(ptr!=NULL){
+		temp = ptr->next;
+		prev = ptr;
+		while(temp!=NULL){
+			if( ptr->data == temp->data){
+				prev->next = temp->next;
+				free(temp);
+			}
+			prev = temp;
+			temp = temp->next;
+		}
+		ptr = ptr->next;
+	}
+}
+
+node * lastKElement(node * head_ref,int k){
+
+	if( k < 0) return NULL;
+
+	node * ptr1 = head_ref;
+	node * ptr2 = head_ref;
+	int i = 0;
+
+	for(i=0;i<k-1;i++){
+		if(ptr2 == NULL) return NULL;
+		else 
+			ptr2 = ptr2->next;
+	}
+
+	if(ptr2 == NULL) return NULL;
+
+	while(ptr2->next != NULL){
+		ptr1 = ptr1->next;
+		ptr2 = ptr2->next;
+	}
+	return ptr1;
+	
+}
+
 int main(void)
 {
 
 	int a[] = {5,4,3,2,1};
-	int b[] =   {6,3,2,1};
+	int b[] =   {6,6,3,3,2,1};
 	int i=0;
 	node * list1 = NULL,*list2 = NULL;
 	for(i=0;i<5;i++)
 		push(&list1,a[i]);
-	for(i=0;i<4;i++)
+	for(i=0;i<6;i++)
 		push(&list2,b[i]);
 
 	traversal(list1);
@@ -140,4 +183,11 @@ int main(void)
 
 	reverse(&result);
 	traversal(result);
+
+	deleteDuplicates(&list2);
+	traversal(list2);
+
+	node * element = lastKElement(list1,2);
+	printf("The kth element from last is %d\n",element->data);
+
 }

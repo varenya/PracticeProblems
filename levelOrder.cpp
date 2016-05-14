@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <stdlib.h>
 #include <queue>
 #include <stack>
@@ -10,6 +11,7 @@ struct node {
 };
 using namespace std;
 
+bool isBalanced(node * root);
 void printLevelOrder(node * root){
 
 	if(root == NULL) return;
@@ -26,7 +28,29 @@ void printLevelOrder(node * root){
 			q.push(n->right);
 
 	}
+
+	cout << endl;
 	
+}
+
+int getHeight(node * root){
+	if ( root == NULL) return 0;
+	else
+		return max(getHeight(root->left),getHeight(root->right))+1;
+}
+
+bool isBalanced(node * root){
+	if(root == NULL) return true;
+
+	else{
+		int diff = getHeight(root->left)-getHeight(root->right);
+		if( abs(diff) > 1){
+			return false;
+		}
+		else{
+			return (isBalanced(root->left) && isBalanced(root->right));
+		}
+	}
 }
 
 void printSpiral(node * root){
@@ -65,6 +89,8 @@ void printSpiral(node * root){
 		}
 
 	}
+
+	cout << endl;
 }
 
 node * newNode(int data){
@@ -83,8 +109,9 @@ int main()
 	root->left->left = newNode(4);
 	root->left->right = newNode(5);
 
-	cout << "Level Order traversal of binary tree is \n";
+	cout << "Level Order traversal of binary tree is \n" << endl;
 	printLevelOrder(root);
+
 	node * root1 = newNode(1);
 	root1->left        = newNode(2);
 	root1->right       = newNode(3);
@@ -92,7 +119,11 @@ int main()
 	root1->left->right = newNode(6);
 	root1->right->left  = newNode(5);
 	root1->right->right = newNode(4);
-	cout << "Spiral Order traversal of binary tree is \n";
+	cout << "Spiral Order traversal of binary tree is \n" << endl;
+	printLevelOrder(root1);
 	printSpiral(root1);
+
+	if( isBalanced(root1) )
+		cout << "Tree is Balanced!" << endl;
 	return 0;
 }
